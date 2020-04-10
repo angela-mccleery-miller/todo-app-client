@@ -4,49 +4,70 @@ import "./index.css";
 import axios from "axios";
 import TodoItem from "./todoItem";
 
-
 class App extends React.Component {
   constructor() {
     super();
 
-    this.state ={
+    this.state = {
       todo: "",
       todos: [],
     };
   }
 
-  renderTodos = () => {
-    return this.state.todos.map(item => {
-      return  <TodoItem key={item.id} item={item} />;
-       
-    });
-  }
+  deleteItem = (id) => {
+    fetch(`https://amm-flask-todo-api.herokuapp.com/todo/${id}`, {
+      method: "DELETE",
+    }).then(
+      this.setState({
+        todos: this.state.todos.filter((item) => {
+          return item.id !== id;
+        }),
+      })
+    );
+    // .catch((err) => console.log("Added todo error: ", err));
+  };
 
+  renderTodos = () => {
+    return this.state.todos.map((item) => {
+      return (
+        <TodoItem key={item.id} item={item} deleteItem={this.deleteItem} />
+      );
+    });
+  };
 
   addTodo = (e) => {
     e.preventDefault();
-    console.log("added todo");
-
+    axios
+      .post("https://amm-flask-todo-api.herokuapp.com/todo", {
+        title: this.state.todo,
+        done: false,
+      })
+      .then((res) => {
+        this.setState({
+          todos: [res.data, ...this.state.todos],
+          todo: "",
+        });
+      })
+      .catch((err) => console.log("Add todo Error: ", err));
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   componentDidMount() {
     axios
       .get("https://amm-flask-todo-api.herokuapp.com/todos")
-      .then(res => {
+      .then((res) => {
         this.setState({
           todos: res.data,
-      });
-    })
-    .catch(err => {
-      console.log(err);
-    });
+        });
+      })
+      .catch((err) => console.log("Add todo Error: ", err));
   }
+
   render() {
     return (
       <div className="app">
@@ -56,7 +77,7 @@ class App extends React.Component {
             type="text"
             placeholder="Add Todo"
             name="todo"
-            onChange={e => this.handleChange(e)}
+            onChange={(e) => this.handleChange(e)}
             value={this.state.todo}
           />
           <button type="submit">Add</button>
