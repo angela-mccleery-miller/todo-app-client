@@ -15,7 +15,8 @@ class App extends React.Component {
   }
 
   deleteItem = (id) => {
-    fetch(`https://amm-flask-todo-api.herokuapp.com/todo/${id}`, {
+    fetch(`http://localhost:5000/todo/${id}`, {
+    // fetch(`https://amm-flask-todo-api.herokuapp.com/todo/${id}`, {
       method: "DELETE",
     }).then(
       this.setState({
@@ -38,7 +39,8 @@ class App extends React.Component {
   addTodo = (e) => {
     e.preventDefault();
     axios
-      .post("https://amm-flask-todo-api.herokuapp.com/todo", {
+      .post("http://localhost:5000/todo", {
+      // .post("https://amm-flask-todo-api.herokuapp.com/todo", {
         title: this.state.todo,
         done: false,
       })
@@ -59,7 +61,8 @@ class App extends React.Component {
 
   componentDidMount() {
     axios
-      .get("https://amm-flask-todo-api.herokuapp.com/todos")
+      .get("http://localhost:5000/todos")
+      // .get("https://amm-flask-todo-api.herokuapp.com/todos")
       .then((res) => {
         this.setState({
           todos: res.data,

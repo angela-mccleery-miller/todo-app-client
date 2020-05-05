@@ -11,7 +11,8 @@ export default class TodoItem extends Component {
 
   toggleDone = () => {
     fetch(
-      `https://amm-flask-todo-api.herokuapp.com/todo/${this.props.item.id}`,
+      `http://localhost:5000/todo/${this.props.item.id}`,
+      // `https://amm-flask-todo-api.herokuapp.com/todo/${this.props.item.id}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
